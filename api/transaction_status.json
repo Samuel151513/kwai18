@@ -1,0 +1,20 @@
+{
+    "bf7c5fca-15e6-4446-977f-4f3e28fb76b6": {
+        "status": "PENDING",
+        "amount": 9.9,
+        "updated_at": "2026-01-31 17:34:21",
+        "user_id": "455f5f2b-602d-4e35-a960-1e25a4fa52b3",
+        "package_id": "6c779899-197a-48d6-b836-168ca1d29368",
+        "package_name": "B\u00e1sico",
+        "credits": 10
+    },
+    "9045f8ac-4f24-4494-a5e9-dc2d6635a21c": {
+        "status": "PENDING",
+        "amount": 9.9,
+        "updated_at": "2026-01-31 17:42:53",
+        "user_id": "455f5f2b-602d-4e35-a960-1e25a4fa52b3",
+        "package_id": "6c779899-197a-48d6-b836-168ca1d29368",
+        "package_name": "B\u00e1sico",
+        "credits": 10
+    }
+}

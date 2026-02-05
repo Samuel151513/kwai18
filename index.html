@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+    <script
+	src="https://cdn.xtracky.com/scripts/utm-handler.js"
+	data-token="c6a0b83b-b83c-458f-b644-48523b58ecd4"
+> 
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kwai para ADULTOS 18+</title>
+    <meta name="description" content="Kwai para ADULTOS 18+ - A plataforma de entretenimento adulto">
+    <meta name="author" content="Kwai para ADULTOS">
+    <link rel="icon" href="images/favicon.png" type="image/png">
+
+    <meta property="og:title" content="Kwai para ADULTOS 18+">
+    <meta property="og:description" content="A plataforma de entretenimento adulto">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="images/favicon.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="/favicon.png">
+    
+    <!-- Theme color for mobile browsers - Kwai Black -->
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script>
+(function () {
+  // Evita iniciar mais de uma vez para o mesmo ID
+  const started = new Set();
+
+  // Se sua função já existe no HTML (como no seu caso), vamos usá-la.
+  function startPolling(transactionId) {
+    if (!transactionId) return;
+    if (started.has(transactionId)) return;
+    started.add(transactionId);
+
+    console.log("✅ Auto-start polling PIX:", transactionId);
+
+    // Chama sua função existente
+    if (typeof window.iniciarVerificacaoPix === "function") {
+      window.iniciarVerificacaoPix(
+        transactionId,
+        (result) => {
+          console.log("✅ PAGO (callback onPaid):", result);
+          // Aqui você pode redirecionar:
+          // window.location.href = "/sucesso.html";
+        },
+        (result) => {
+          console.warn("❌ Falhou/expirou (callback onError):", result);
+        }
+      );
+    } else {
+      console.error("❌ iniciarVerificacaoPix não está definida no window.");
+    }
+  }
+
+  const originalFetch = window.fetch.bind(window);
+
+  window.fetch = async function (input, init) {
+    // Detecta URL
+    const url = typeof input === "string" ? input : (input && input.url ? input.url : "");
+    const isGeneratePixEndpoint = url.includes("/api/generate-pix.php");
+
+    // Detecta o body (action: generate)
+    let bodyText = "";
+    try {
+      if (init && init.body) {
+        bodyText = typeof init.body === "string" ? init.body : "";
+      } else if (input instanceof Request) {
+        // Se chamaram fetch(Request) sem init, conseguimos ler o body via clone()
+        const clone = input.clone();
+        bodyText = await clone.text();
+      }
+    } catch (e) {
+      // Ignora erro de leitura do body
+    }
+
+    const isGenerateAction =
+      isGeneratePixEndpoint &&
+      bodyText &&
+      (bodyText.includes('"action":"generate"') || bodyText.includes('"action": "generate"'));
+
+    // Faz a requisição real
+    const response = await originalFetch(input, init);
+
+    // Se foi geração, tenta ler o JSON do retorno sem "consumir" a resposta original
+    if (isGenerateAction) {
+      try {
+        const data = await response.clone().json();
+
+        // Seu retorno típico: { success:true, data:{ id:"...", ... } }
+        const transactionId = data?.data?.id;
+
+        console.log("📌 PIX gerado detectado (auto):", transactionId, data);
+
+        if (transactionId) {
+          startPolling(transactionId);
+        } else {
+          console.warn("⚠️ Não achei data.id no retorno:", data);
+        }
+      } catch (err) {
+        console.warn("⚠️ Não deu pra ler JSON do retorno do generate-pix:", err);
+      }
+    }
+
+    return response;
+  };
+
+  console.log("✅ Auto PIX Watcher ativo (fetch intercept).");
+})();
+</script>
+    <script type="module" crossorigin="" src="js/index-BeAo9r18.js"></script>
+    <link rel="stylesheet" crossorigin="" href="css/index-DMWPLOy1.css">
+  <script defer="" src="js/~flock.js" data-proxy-url="https://appadultos.com/~api/analytics"></script>
+  <script>
+(function() {
+    'use strict';
+
+    // Captura e ATUALIZA os parâmetros da URL
+    function captureAndUpdateParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Pega os parâmetros já salvos
+        let savedParams = {};
+        const saved = sessionStorage.getItem('urlParams') || localStorage.getItem('urlParams');
+        if (saved) {
+            try {
+                savedParams = JSON.parse(saved);
+            } catch (e) {
+                savedParams = {};
+            }
+        }
+        
+        // Adiciona os novos parâmetros aos salvos (merge)
+        let hasNewParams = false;
+        for (const [key, value] of urlParams.entries()) {
+            if (!savedParams[key] || savedParams[key] !== value) {
+                savedParams[key] = value;
+                hasNewParams = true;
+            }
+        }
+        
+        // Salva no sessionStorage e localStorage
+        if (hasNewParams || Object.keys(savedParams).length > 0) {
+            sessionStorage.setItem('urlParams', JSON.stringify(savedParams));
+            localStorage.setItem('urlParams', JSON.stringify(savedParams));
+            console.log('✅ Parâmetros atualizados:', savedParams);
+        }
+        
+        return savedParams;
+    }
+
+    // Retorna os parâmetros salvos
+    function getURLParams() {
+        let saved = sessionStorage.getItem('urlParams');
+        if (!saved) {
+            saved = localStorage.getItem('urlParams');
+        }
+        return saved ? JSON.parse(saved) : {};
+    }
+
+    // Adiciona parâmetros a uma URL
+    function addParamsToURL(url) {
+        if (!url) return url;
+        
+        const savedParams = getURLParams();
+        if (Object.keys(savedParams).length === 0) return url;
+
+        try {
+            // Separa pathname, search e hash
+            let pathname = url;
+            let search = '';
+            let hash = '';
+
+            // Remove hash
+            const hashIndex = url.indexOf('#');
+            if (hashIndex !== -1) {
+                hash = url.substring(hashIndex);
+                url = url.substring(0, hashIndex);
+            }
+
+            // Remove search
+            const searchIndex = url.indexOf('?');
+            if (searchIndex !== -1) {
+                search = url.substring(searchIndex);
+                pathname = url.substring(0, searchIndex);
+            }
+
+            // Cria URLSearchParams com os parâmetros existentes
+            const urlParams = new URLSearchParams(search);
+            
+            // Adiciona TODOS os parâmetros salvos
+            Object.keys(savedParams).forEach(key => {
+                urlParams.set(key, savedParams[key]); // Use SET para sobrescrever
+            });
+
+            // Reconstrói a URL
+            const newSearch = urlParams.toString();
+            const finalURL = pathname + (newSearch ? '?' + newSearch : '') + hash;
+            
+            if (url !== finalURL) {
+                console.log('🔄 URL modificada:', url, '→', finalURL);
+            }
+            return finalURL;
+        } catch (e) {
+            console.error('❌ Erro ao adicionar parâmetros:', e);
+            return url;
+        }
+    }
+
+    // Captura parâmetros iniciais
+    captureAndUpdateParams();
+
+    // INTERCEPTA HISTORY API
+    const originalPushState = history.pushState;
+    const originalReplaceState = history.replaceState;
+
+    history.pushState = function(state, title, url) {
+        const modifiedURL = addParamsToURL(url);
+        console.log('📍 pushState:', url, '→', modifiedURL);
+        return originalPushState.call(this, state, title, modifiedURL);
+    };
+
+    history.replaceState = function(state, title, url) {
+        // Primeiro atualiza os parâmetros salvos com os da URL atual
+        captureAndUpdateParams();
+        
+        const modifiedURL = addParamsToURL(url);
+        console.log('🔄 replaceState:', url, '→', modifiedURL);
+        return originalReplaceState.call(this, state, title, modifiedURL);
+    };
+
+    // MONITORA MUDANÇAS DE URL
+    let lastUrl = location.href;
+    
+    function checkURLChange() {
+        const currentUrl = location.href;
+        if (currentUrl !== lastUrl) {
+            console.log('🌐 URL mudou:', lastUrl, '→', currentUrl);
+            lastUrl = currentUrl;
+            
+            // IMPORTANTE: Captura novos parâmetros que podem ter aparecido
+            captureAndUpdateParams();
+            
+            // Agora força todos os parâmetros salvos na URL
+            setTimeout(function() {
+                const savedParams = getURLParams();
+                const currentParams = new URLSearchParams(window.location.search);
+                let needsUpdate = false;
+                
+                Object.keys(savedParams).forEach(key => {
+                    const currentValue = currentParams.get(key);
+                    const savedValue = savedParams[key];
+                    
+                    if (currentValue !== savedValue) {
+                        currentParams.set(key, savedValue);
+                        needsUpdate = true;
+                    }
+                });
+
+                if (needsUpdate) {
+                    const newUrl = window.location.pathname + '?' + currentParams.toString() + window.location.hash;
+                    console.log('✨ Forçando TODOS os parâmetros na URL:', newUrl);
+                    history.replaceState(history.state, '', newUrl);
+                }
+            }, 50);
+        }
+    }
+
+    // Verifica mudanças de URL a cada 100ms
+    setInterval(checkURLChange, 100);
+
+    // MUTATION OBSERVER
+    const observer = new MutationObserver(checkURLChange);
+    
+    if (document.body) {
+        observer.observe(document.body, { childList: true, subtree: true });
+    } else {
+        document.addEventListener('DOMContentLoaded', function() {
+            observer.observe(document.body, { childList: true, subtree: true });
+        });
+    }
+
+    // POPSTATE
+    window.addEventListener('popstate', function() {
+        console.log('⬅️ popstate detectado');
+        setTimeout(checkURLChange, 10);
+    });
+
+    // INTERCEPTA CLIQUES
+    document.addEventListener('click', function(e) {
+        const link = e.target.closest('a');
+        if (link && link.href) {
+            try {
+                const linkUrl = new URL(link.href);
+                
+                if (linkUrl.origin === window.location.origin && !link.target) {
+                    const params = getURLParams();
+                    if (Object.keys(params).length > 0) {
+                        Object.keys(params).forEach(key => {
+                            linkUrl.searchParams.set(key, params[key]); // SET para garantir
+                        });
+                        link.href = linkUrl.toString();
+                        console.log('🔗 Link atualizado:', link.href);
+                    }
+                }
+            } catch (err) {
+                // Ignora erros de parsing
+            }
+        }
+    }, true);
+
+    // EVENTOS DE CARREGAMENTO
+    window.addEventListener('DOMContentLoaded', function() {
+        captureAndUpdateParams();
+        checkURLChange();
+    });
+    
+    window.addEventListener('load', function() {
+        captureAndUpdateParams();
+        checkURLChange();
+        
+        // Continua verificando por 3 segundos
+        let checks = 0;
+        const postLoadInterval = setInterval(function() {
+            captureAndUpdateParams();
+            checkURLChange();
+            checks++;
+            if (checks >= 6) {
+                clearInterval(postLoadInterval);
+            }
+        }, 500);
+    });
+
+    // API GLOBAL
+    window.URLParamsManager = {
+        getParams: getURLParams,
+        getParamsString: function() {
+            const params = getURLParams();
+            const queryString = new URLSearchParams(params).toString();
+            return queryString ? '?' + queryString : '';
+        },
+        checkURL: checkURLChange,
+        updateParams: captureAndUpdateParams
+    };
+
+    console.log('✅ URL Params Manager ATIVO. Parâmetros:', getURLParams());
+})();
+</script>
+
+
+<script>
+//ABAIXO SCRIPT QUE VERIFICA NÃO MEXER PFVR
+    
+/**
+ * Inicia a verificação automática do status do PIX
+ * @param {string} transactionId - ID retornado ao gerar o PIX
+ * @param {function} onPaid - callback quando o pagamento for aprovado
+ * @param {function} onError - callback em caso de erro
+ */
+function iniciarVerificacaoPix(transactionId, onPaid, onError) {
+  if (!transactionId) {
+    console.error("Transaction ID não informado");
+    return;
+  }
+
+  console.log("🔄 Iniciando verificação do PIX:", transactionId);
+
+  const intervalo = setInterval(async () => {
+    try {
+      const response = await fetch("/api/generate-pix.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          action: "status",
+          id: transactionId
+        })
+      });
+
+      const result = await response.json();
+      console.log("📡 Status PIX:", result);
+
+      const status =
+        result?.status ||
+        result?.data?.status ||
+        "pending";
+
+      if (status === "AUTHORIZED" || status === "APPROVED" || status === "paid") {
+        clearInterval(intervalo);
+        console.log("✅ PIX APROVADO!");
+
+        if (typeof onPaid === "function") {
+          onPaid(result);
+        }
+      }
+
+      if (status === "CANCELLED" || status === "EXPIRED" || status === "FAILED") {
+        clearInterval(intervalo);
+        console.warn("❌ PIX cancelado ou expirado");
+
+        if (typeof onError === "function") {
+          onError(result);
+        }
+      }
+
+    } catch (error) {
+      console.error("Erro ao verificar PIX:", error);
+    }
+  }, 3000); // verifica a cada 3 segundos
+}
+</script>
+
+  </head>
+
+  <body>
+    <div id="root"></div>
+  
+</body></html>
